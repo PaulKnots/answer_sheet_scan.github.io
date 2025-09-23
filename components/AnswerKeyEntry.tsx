@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Answers } from '../types';
 
@@ -6,6 +5,7 @@ interface AnswerKeyEntryProps {
   onComplete: (key: Answers) => void;
   initialKey: Answers;
   totalQuestions: number;
+  onShowSaved: () => void;
 }
 
 const AnswerOption: React.FC<{
@@ -27,7 +27,7 @@ const AnswerOption: React.FC<{
 );
 
 
-const AnswerKeyEntry: React.FC<AnswerKeyEntryProps> = ({ onComplete, initialKey, totalQuestions }) => {
+const AnswerKeyEntry: React.FC<AnswerKeyEntryProps> = ({ onComplete, initialKey, totalQuestions, onShowSaved }) => {
   const [key, setKey] = useState<Answers>(initialKey);
 
   const handleSelect = (question: string, answer: string) => {
@@ -35,7 +35,8 @@ const AnswerKeyEntry: React.FC<AnswerKeyEntryProps> = ({ onComplete, initialKey,
   };
   
   const isComplete = useMemo(() => {
-    return Object.keys(key).length === totalQuestions;
+    const filledCount = Object.values(key).filter(val => val).length;
+    return filledCount === totalQuestions;
   }, [key, totalQuestions]);
 
   const handleSubmit = () => {
@@ -91,7 +92,7 @@ const AnswerKeyEntry: React.FC<AnswerKeyEntryProps> = ({ onComplete, initialKey,
 
       <div className="mt-8 w-full flex flex-col items-center">
         <p className="mb-4 text-sm text-slate-500">
-          {Object.keys(key).length} / {totalQuestions} answers set.
+          {Object.values(key).filter(val => val).length} / {totalQuestions} answers set.
         </p>
         <button
           onClick={handleSubmit}
@@ -100,10 +101,16 @@ const AnswerKeyEntry: React.FC<AnswerKeyEntryProps> = ({ onComplete, initialKey,
             hover:bg-emerald-600 transition-all duration-200 disabled:bg-slate-300 disabled:cursor-not-allowed
             disabled:shadow-none flex items-center justify-center gap-2"
         >
-           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+           <svg xmlns="http://www.w.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                 <path d="M12 2a4 4 0 0 0-4 4v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2V6a4 4 0 0 0-4-4zm0 2c1.11 0 2 .89 2 2v2H10V6c0-1.11.89-2 2-2z" />
             </svg>
           Lock Key & Start Scanning
+        </button>
+        <button
+          onClick={onShowSaved}
+          className="mt-4 text-slate-500 hover:text-slate-700 font-semibold text-sm transition-colors"
+        >
+          View Saved Results
         </button>
       </div>
     </div>

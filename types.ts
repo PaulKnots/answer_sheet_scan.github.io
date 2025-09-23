@@ -1,9 +1,9 @@
-
 export enum AppState {
   KEY_ENTRY = 'KEY_ENTRY',
   SCANNING = 'SCANNING',
   GRADING = 'GRADING',
   RESULTS = 'RESULTS',
+  SAVED_RESULTS = 'SAVED_RESULTS',
 }
 
 // Represents the answers for a sheet, mapping question number to the selected option.
@@ -23,4 +23,9 @@ export interface GradedResult {
   details: {
     [questionNumber: string]: GradedResultDetail;
   };
+}
+
+export interface SavedResult extends GradedResult {
+  id: string;
+  timestamp: Date;
 }

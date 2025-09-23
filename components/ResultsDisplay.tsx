@@ -1,15 +1,16 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { GradedResult } from '../types';
 
 interface ResultsDisplayProps {
   result: GradedResult;
   onScanAnother: () => void;
   onChangeKey: () => void;
+  onSave: () => void;
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, onChangeKey }) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, onChangeKey, onSave }) => {
   const { score, total, details } = result;
+  const [isSaved, setIsSaved] = useState(false);
   const percentage = total > 0 ? ((score / total) * 100).toFixed(1) : 0;
 
   const getCellClass = (isCorrect: boolean) => {
@@ -19,6 +20,11 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, 
   const getBorderClass = (isCorrect: boolean) => {
     return isCorrect ? 'border-emerald-200' : 'border-red-200';
   }
+  
+  const handleSave = () => {
+    onSave();
+    setIsSaved(true);
+  };
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -63,12 +69,19 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, 
         </div>
       </div>
       
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center w-full gap-4">
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center w-full gap-4 flex-wrap">
         <button
           onClick={onChangeKey}
           className="px-6 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl shadow-md hover:bg-slate-300 transition-all duration-200 w-full sm:w-auto"
         >
           Change Answer Key
+        </button>
+        <button
+          onClick={handleSave}
+          disabled={isSaved}
+          className="px-6 py-3 bg-blue-500 text-white font-bold rounded-xl shadow-md hover:bg-blue-600 transition-all duration-200 w-full sm:w-auto disabled:bg-slate-300 disabled:cursor-not-allowed"
+        >
+          {isSaved ? '✓ Saved' : 'Save Result'}
         </button>
         <button
           onClick={onScanAnother}
