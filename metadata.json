@@ -1,0 +1,7 @@
+{
+  "name": "OMR Answer Sheet Grader",
+  "description": "An application to automatically grade multiple-choice answer sheets using a device's camera. Users can set an answer key, scan a completed sheet, and get an instant score and detailed results.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
