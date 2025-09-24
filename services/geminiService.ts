@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { Answers } from '../types';
 
@@ -38,7 +37,7 @@ export const extractAnswersFromImage = async (base64ImageData: string): Promise<
   };
 
   const textPart = {
-    text: `You are an expert Optical Mark Recognition (OMR) system. Analyze this image of a ${TOTAL_QUESTIONS}-question multiple-choice answer sheet. The options are A, B, C, D, and E. For each question from 1 to ${TOTAL_QUESTIONS}, identify the single shaded option. If a question has no shaded option or multiple shaded options, mark it as 'BLANK'. Provide the output as a JSON object where the keys are the question numbers (as strings from "1" to "${TOTAL_QUESTIONS}") and the values are the identified answers ('A', 'B', 'C', 'D', 'E', or 'BLANK'). Ensure every question number from 1 to ${TOTAL_QUESTIONS} is present in the final JSON object.`,
+    text: `You are an expert Optical Mark Recognition (OMR) system. Analyze this image of a ${TOTAL_QUESTIONS}-question multiple-choice answer sheet. Pay close attention to the physical layout: the columns containing the question numbers are approximately 7mm wide, and the columns for the answer options (A, B, C, D, E) are each approximately 6mm wide. There are 5 choices for each question. For each question from 1 to ${TOTAL_QUESTIONS}, identify the single shaded option. If a question has no shaded option or multiple shaded options, mark it as 'BLANK'. Provide the output as a JSON object where the keys are the question numbers (as strings from "1" to "${TOTAL_QUESTIONS}") and the values are the identified answers ('A', 'B', 'C', 'D', 'E', or 'BLANK'). Ensure every question number from 1 to ${TOTAL_QUESTIONS} is present in the final JSON object.`,
   };
 
   try {
