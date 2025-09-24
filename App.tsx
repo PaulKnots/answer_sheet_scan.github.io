@@ -1,12 +1,12 @@
+
 import React, { useState, useCallback } from 'react';
-import { AppState, Answers, GradedResult, SavedResult } from './types';
+import { AppState, Answers, GradedResult } from './types';
 import { extractAnswersFromImage } from './services/geminiService';
 import AnswerKeyEntry from './components/AnswerKeyEntry';
 import CameraView from './components/CameraView';
 import ResultsDisplay from './components/ResultsDisplay';
 import Header from './components/Header';
 import Loader from './components/Loader';
-import SavedResults from './components/SavedResults';
 
 const TOTAL_QUESTIONS = 60;
 
@@ -15,7 +15,6 @@ const App: React.FC = () => {
   const [answerKey, setAnswerKey] = useState<Answers>({});
   const [studentAnswers, setStudentAnswers] = useState<Answers | null>(null);
   const [gradedResult, setGradedResult] = useState<GradedResult | null>(null);
-  const [savedResults, setSavedResults] = useState<SavedResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -82,25 +81,6 @@ const App: React.FC = () => {
     setAppState(AppState.KEY_ENTRY);
   };
 
-  const handleSaveResult = () => {
-    if (gradedResult) {
-      const newSavedResult: SavedResult = {
-        ...gradedResult,
-        id: Date.now().toString(),
-        timestamp: new Date(),
-      };
-      setSavedResults(prev => [newSavedResult, ...prev]);
-    }
-  };
-  
-  const handleShowSaved = () => {
-    setAppState(AppState.SAVED_RESULTS);
-  };
-
-  const handleClearSaved = () => {
-    setSavedResults([]);
-  };
-
   const renderContent = () => {
     if (isLoading) {
       return <Loader message="Analyzing and Grading..." />;
@@ -108,15 +88,13 @@ const App: React.FC = () => {
 
     switch (appState) {
       case AppState.KEY_ENTRY:
-        return <AnswerKeyEntry onComplete={handleKeyComplete} initialKey={answerKey} totalQuestions={TOTAL_QUESTIONS} onShowSaved={handleShowSaved} />;
+        return <AnswerKeyEntry onComplete={handleKeyComplete} initialKey={answerKey} totalQuestions={TOTAL_QUESTIONS} />;
       case AppState.SCANNING:
         return <CameraView onCapture={handleCapture} onBack={handleChangeKey} error={error} />;
       case AppState.GRADING:
          return <Loader message="Analyzing and Grading..." />;
       case AppState.RESULTS:
-        return gradedResult && <ResultsDisplay result={gradedResult} onScanAnother={handleScanAnother} onChangeKey={handleChangeKey} onSave={handleSaveResult} />;
-      case AppState.SAVED_RESULTS:
-        return <SavedResults results={savedResults} onBack={handleChangeKey} onClear={handleClearSaved} />;
+        return gradedResult && <ResultsDisplay result={gradedResult} onScanAnother={handleScanAnother} onChangeKey={handleChangeKey} />;
       default:
         return <div>Invalid state</div>;
     }

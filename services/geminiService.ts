@@ -38,7 +38,7 @@ export const extractAnswersFromImage = async (base64ImageData: string): Promise<
   };
 
   const textPart = {
-    text: `You are an expert Optical Mark Recognition (OMR) system specialized in reading Thai answer sheets. Analyze this image of a 60-question multiple-choice answer sheet. The sheet is structured in four columns of 15 questions each. For each question from 1 to 60, identify the single shaded option. The options are labeled with Thai characters which correspond to English letters as follows: ก is A, ข is B, ค is C, ง is D, and จ is E. If a question has no shaded option or multiple shaded options, mark it as 'BLANK'. Provide the output as a JSON object where the keys are the question numbers (as strings from "1" to "60") and the values are the identified English letter answers ('A', 'B', 'C', 'D', 'E', or 'BLANK'). Ensure every question number from 1 to 60 is present in the final JSON object.`,
+    text: `You are an expert Optical Mark Recognition (OMR) system. Analyze this image of a ${TOTAL_QUESTIONS}-question multiple-choice answer sheet. The options are A, B, C, D, and E. For each question from 1 to ${TOTAL_QUESTIONS}, identify the single shaded option. If a question has no shaded option or multiple shaded options, mark it as 'BLANK'. Provide the output as a JSON object where the keys are the question numbers (as strings from "1" to "${TOTAL_QUESTIONS}") and the values are the identified answers ('A', 'B', 'C', 'D', 'E', or 'BLANK'). Ensure every question number from 1 to ${TOTAL_QUESTIONS} is present in the final JSON object.`,
   };
 
   try {

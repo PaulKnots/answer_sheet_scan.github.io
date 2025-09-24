@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { GradedResult } from '../types';
+import React from 'react';
+// FIX: Import `GradedResultDetail` to use for type casting.
+import { GradedResult, GradedResultDetail } from '../types';
 
 interface ResultsDisplayProps {
   result: GradedResult;
   onScanAnother: () => void;
   onChangeKey: () => void;
-  onSave: () => void;
 }
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, onChangeKey, onSave }) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, onChangeKey }) => {
   const { score, total, details } = result;
-  const [isSaved, setIsSaved] = useState(false);
   const percentage = total > 0 ? ((score / total) * 100).toFixed(1) : 0;
 
   const getCellClass = (isCorrect: boolean) => {
@@ -20,11 +19,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, 
   const getBorderClass = (isCorrect: boolean) => {
     return isCorrect ? 'border-emerald-200' : 'border-red-200';
   }
-  
-  const handleSave = () => {
-    onSave();
-    setIsSaved(true);
-  };
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -42,7 +36,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, 
         <h3 className="text-xl font-bold mb-4 text-slate-700 text-center">Detailed Results</h3>
         <div className="max-h-96 overflow-y-auto pr-2 border border-slate-200 rounded-lg p-2 bg-slate-50/50">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            {Object.entries(details).sort(([a], [b]) => parseInt(a) - parseInt(b)).map(([qNum, detail]) => (
+            {/* FIX: Cast the result of Object.entries to ensure `detail` is correctly typed as GradedResultDetail. */}
+            {(Object.entries(details) as [string, GradedResultDetail][]).sort(([a], [b]) => parseInt(a) - parseInt(b)).map(([qNum, detail]) => (
               <div
                 key={qNum}
                 className={`flex items-center justify-between p-3 rounded-lg border ${getBorderClass(detail.isCorrect)} ${getCellClass(detail.isCorrect)}`}
@@ -69,19 +64,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result, onScanAnother, 
         </div>
       </div>
       
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center w-full gap-4 flex-wrap">
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center w-full gap-4">
         <button
           onClick={onChangeKey}
           className="px-6 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl shadow-md hover:bg-slate-300 transition-all duration-200 w-full sm:w-auto"
         >
           Change Answer Key
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={isSaved}
-          className="px-6 py-3 bg-blue-500 text-white font-bold rounded-xl shadow-md hover:bg-blue-600 transition-all duration-200 w-full sm:w-auto disabled:bg-slate-300 disabled:cursor-not-allowed"
-        >
-          {isSaved ? '✓ Saved' : 'Save Result'}
         </button>
         <button
           onClick={onScanAnother}

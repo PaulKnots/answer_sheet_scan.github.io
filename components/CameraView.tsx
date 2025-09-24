@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 interface CameraViewProps {
@@ -72,7 +73,7 @@ const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack, error }) => 
     <div className="flex flex-col items-center">
       <h2 className="text-2xl font-bold mb-2 text-slate-700">Scan Answer Sheet</h2>
       <p className="text-slate-500 mb-6 text-center">
-        Align the corners of the sheet with the guides for a clear, well-lit image.
+        Align the 4 corners of the answer sheet with the guides for an accurate scan.
       </p>
 
       {error && (
@@ -82,7 +83,7 @@ const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack, error }) => 
         </div>
       )}
 
-      <div className="w-full max-w-2xl aspect-video bg-slate-900 rounded-xl overflow-hidden shadow-lg relative border-4 border-slate-200">
+      <div className="w-full max-w-md mx-auto aspect-[3/4] bg-slate-900 rounded-xl overflow-hidden shadow-lg relative border-4 border-slate-200">
         {cameraError ? (
           <div className="w-full h-full flex items-center justify-center p-4 text-center text-white">
             <p>{cameraError}</p>
@@ -90,11 +91,11 @@ const CameraView: React.FC<CameraViewProps> = ({ onCapture, onBack, error }) => 
         ) : (
           <>
             <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover"></video>
-            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-white/70 rounded-tl-lg shadow-lg"></div>
-              <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-white/70 rounded-tr-lg shadow-lg"></div>
-              <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-white/70 rounded-bl-lg shadow-lg"></div>
-              <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-white/70 rounded-br-lg shadow-lg"></div>
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-white/80 rounded-tl-lg animate-pulse"></div>
+              <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-white/80 rounded-tr-lg animate-pulse"></div>
+              <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-white/80 rounded-bl-lg animate-pulse"></div>
+              <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-white/80 rounded-br-lg animate-pulse"></div>
             </div>
           </>
         )}
